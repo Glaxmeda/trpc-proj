@@ -1,5 +1,5 @@
 import * as mongodb from 'mongodb';
-import { Account } from './models/accounts/types';
+import { Account } from './models/accounts/accounts-types';
 
 export async function connectToCluster() {
     const uri = 'mongodb://127.0.0.1/local-db-name';
@@ -12,7 +12,7 @@ export async function connectToCluster() {
         return getCollections(mongoClient.db());
     } catch (error) {
         console.error('Connection to MongoDB Atlas failed!', error);
-        process.exit();
+        throw error;
     }
  }
 
