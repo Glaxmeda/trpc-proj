@@ -7,12 +7,12 @@ export function createRoutes(app: express.Express, accountsCollection: mongodb.C
     app.post('/signin', async (req, res) => {
         const username = req.body.username;
         const password = req.body.password;
-
-        if(typeof username != 'string' && username.length < 4) {
+        
+        if(typeof username != 'string' || username.length < 4) {
             throw new Error();
         }
 
-        if(typeof password != 'string' && password.length < 4) {
+        if(typeof password != 'string' || password.length < 4) {
             throw new Error();
         }
 
