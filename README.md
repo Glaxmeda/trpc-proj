@@ -34,3 +34,13 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+OUR STEPS:
+1. Install mongodb community using instructions at this link: https://www.mongodb.com/docs/manual/administration/install-community/
+
+2. In your terminal, type in `mongosh`. This will bring up an interactive shell that you can use to interact with your local mongo database.
+
+3. Type in `show dbs` to see all available databases in the mongoshell. Create a new db by typing in `use local-db-name`. This will create the local db. This will also automatically make you select this current database as active.
+
+4. While in the current database, you can type in `show collections` to see the available collections in the database that you're currently using. (You can see what other mongo commands exist that allow you to insert, delete etc into particular collections.)
