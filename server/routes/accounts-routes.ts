@@ -1,6 +1,7 @@
 import express from 'express';
 import * as mongodb from 'mongodb';
-import { Account } from './types';
+import { Account } from '../models/accounts/accounts-types';
+import { AccountModel } from '../models/accounts/accounts-models';
 
 export function createRoutes(app: express.Express, accountsCollection: mongodb.Collection<Account>) {
     app.post('/signin', async (req, res) => {
@@ -15,10 +16,8 @@ export function createRoutes(app: express.Express, accountsCollection: mongodb.C
             throw new Error();
         }
 
-        const passwordHash = password + 'my_hash';
-
-        await accountsCollection.insertOne({ username, passwordHash });
-
+        await AccountModel.singleton(accountsCollection).createNewAccount({ username, password });
+        
         res.send({ success: true });
     });
 }

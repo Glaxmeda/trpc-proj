@@ -1,6 +1,6 @@
 import express from 'express'
 
-import * as accounts from './models/accounts/account';
+import * as accounts from './routes/accounts-routes';
 import { connectToCluster } from './mongodb-init-helpers';
 
 startServer().catch((e) => {
@@ -28,8 +28,3 @@ async function startServer() {
         console.log(`We are listening on port ${PORT}!`);
     });
 }
-
-
-
-
-
