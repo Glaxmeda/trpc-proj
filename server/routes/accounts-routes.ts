@@ -2,9 +2,10 @@ import express from 'express';
 import * as mongodb from 'mongodb';
 import { Account } from '../models/accounts/accounts-types';
 import { AccountModel } from '../models/accounts/accounts-models';
+import { asyncRoute } from './route-helpers';
 
 export function createRoutes(app: express.Express, accountsCollection: mongodb.Collection<Account>) {
-    app.post('/signin', async (req, res) => {
+    app.post('/signin', asyncRoute(async (req, res) => {
         const username = req.body.username;
         const password = req.body.password;
         
@@ -18,6 +19,6 @@ export function createRoutes(app: express.Express, accountsCollection: mongodb.C
 
         await AccountModel.singleton(accountsCollection).createNewAccount({ username, password });
         
-        res.send({ success: true });
-    });
+        return res.send({ success: true });
+    }));
 }

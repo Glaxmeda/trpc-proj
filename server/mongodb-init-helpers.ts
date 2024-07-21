@@ -3,13 +3,18 @@ import { Account } from './models/accounts/accounts-types';
 
 export async function connectToCluster() {
     const uri = 'mongodb://127.0.0.1/local-db-name';
+
+    const connectionOptions: mongodb.MongoClientOptions = {
+        writeConcern: { w: 1 },
+        readConcern: { level: 'available' }
+    };
+
     try {
-        const mongoClient = new mongodb.MongoClient(uri);
         console.log('Connecting to MongoDB Atlas cluster...');
-        await mongoClient.connect();
+        const db = (await mongodb.MongoClient.connect(uri, connectionOptions)).db();
         console.log('Successfully connected to MongoDB Atlas!');
  
-        return getCollections(mongoClient.db());
+        return getCollections(db);
     } catch (error) {
         console.error('Connection to MongoDB Atlas failed!', error);
         throw error;
@@ -21,3 +26,5 @@ export async function connectToCluster() {
         account: db.collection<Account>('accounts')
     }
 }
+
+export const ZERO_OBJECTID = new mongodb.ObjectId('000000000000000000000000');
