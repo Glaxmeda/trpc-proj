@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser';
 import * as accounts from './routes/accounts-routes';
 import { connectToCluster } from './mongodb-init-helpers';
+import { ExpectedError } from './routes/route-helpers';
 
 startServer().catch((e) => {
     console.log(e);
@@ -22,26 +23,37 @@ async function startServer() {
     // Allows for a json-like experience even with url-encoded data
     app.use(bodyParser.urlencoded({ extended: true }));
 
-    // Error handling middleware
-    app.use(errorHandler);
-
     app.get('/', async (_req: express.Request, res: express.Response) => {
         res.send('Hello world!');
     });
 
     // Route creators
     accounts.createRoutes(app, collections.account);
+
+
+    // Error handling middleware
+    app.use(errorHandler);
     
     app.listen(PORT, () => {
         console.log(`We are listening on port ${PORT}!`);
     });
 }
 
-function errorHandler(err: any, _req: express.Request, res: express.Response, _: unknown) {
-    if(err.status == 500) {
-        console.error(err);
+function errorHandler(err: unknown, _req: express.Request, res: express.Response, _: express.NextFunction) {
+    let message;
+    let status = 500;
+    if(err instanceof ExpectedError) {
+        if(err.status >= 500) {
+            console.error(err.message);
+        }
+        message = err.message;
+        status = err.status;
+    }  else if(err instanceof Error && err.message.length > 0) {
+        message = err.message;
+    } else {
+        message = 'Unknown error';
     }
 
-    res.status(err.status ?? 500);
-    return res.send(err);
+    res.status(status);
+    return res.send(message);
 }
