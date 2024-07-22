@@ -9,6 +9,8 @@ startServer().catch((e) => {
     process.exit(1);
 });
 
+
+
 async function startServer() {
     const collections = await connectToCluster();
 
@@ -23,16 +25,17 @@ async function startServer() {
     // Allows for a json-like experience even with url-encoded data
     app.use(bodyParser.urlencoded({ extended: true }));
 
-    app.get('/', async (_req: express.Request, res: express.Response) => {
-        res.send('Hello world!');
-    });
+    // app.get('/', async (_req: express.Request, res: express.Response) => {
+    //     res.send('Hello world!');
+    // });
 
     // Route creators
     accounts.createRoutes(app, collections.account);
 
-
     // Error handling middleware
     app.use(errorHandler);
+
+
     
     app.listen(PORT, () => {
         console.log(`We are listening on port ${PORT}!`);

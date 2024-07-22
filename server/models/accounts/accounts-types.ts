@@ -1,4 +1,5 @@
 export type Account = {
     username: string, 
-    passwordHash: string
+    passwordHash: string,
+    salt: string
 }
